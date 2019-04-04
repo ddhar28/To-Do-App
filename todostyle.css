@@ -1,0 +1,54 @@
+h1 {
+  color: brown
+}
+
+.input {
+  height:75px;
+  background-color: brown;
+}
+
+#taskList {
+  padding: 7px; 
+  list-style: none;
+}
+
+li {
+  background-color: wheat;
+  padding: 5px;
+  border: 2px solid brown;
+  border-bottom: 1px;
+  word-wrap: break-word
+}
+
+li:nth-last-child(1) {
+  border-bottom: 2px solid brown;
+}
+
+#taskInp {
+  width: 500px; 
+  background-color: wheat;
+  height: 30px;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+button {
+  background-color: beige;
+}
+
+#addTask {
+  height: 35px;
+  width: 100px;
+}
+
+.complete, .delete, .edit {
+    float: right;
+    width: 75px;
+    color: beige;
+    background-color: brown
+}
+
+.inactive>span{
+  text-decoration: line-through;
+  color: gray
+}
