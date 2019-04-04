@@ -8,7 +8,7 @@ h1 {
 }
 
 #taskList {
-  padding: 7px; 
+  padding: 0; 
   list-style: none;
 }
 
@@ -17,7 +17,6 @@ li {
   padding: 5px;
   border: 2px solid brown;
   border-bottom: 1px;
-  word-wrap: break-word
 }
 
 li:nth-last-child(1) {
@@ -30,6 +29,7 @@ li:nth-last-child(1) {
   height: 30px;
   margin-top: 20px;
   margin-left: 10px;
+  padding-left: 5px
 }
 
 button {
@@ -41,14 +41,34 @@ button {
   width: 100px;
 }
 
-.complete, .delete, .edit {
+.complete, .edit, .delete {
     float: right;
     width: 75px;
+    height: 25px;
     color: beige;
     background-color: brown
 }
 
-.inactive>span{
+.inactive>input{
   text-decoration: line-through;
   color: gray
+}
+
+.noEdit {
+  color: black;
+  background: transparent;
+  border: none;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: bold;
+  font-size: medium
+}
+
+.editMode {
+  border-color: brown;
+  width: 500px;
+  height: 25px;
+}
+
+li>input {
+  width: 60%
 }
