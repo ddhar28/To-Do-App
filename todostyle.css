@@ -13,10 +13,12 @@ h1 {
 }
 
 li {
+  position: relative;
   background-color: wheat;
   padding: 5px;
   border: 2px solid brown;
   border-bottom: 1px;
+  height: auto;
 }
 
 li:nth-last-child(1) {
@@ -41,7 +43,7 @@ button {
   width: 100px;
 }
 
-.complete, .edit, .delete {
+.complete, .edit, .delete, .addNote {
     float: right;
     width: 75px;
     height: 25px;
@@ -71,4 +73,22 @@ button {
 
 li>input {
   width: 60%
+}
+
+.noteEdit {
+  position: absolute;
+  left: 6px;
+  top: 40px;
+  width: 50%;
+  height: 65%;
+  resize: none;
+  font-size: medium
+}
+
+.noteDone {
+  display: none
+}
+
+button:disabled {
+  background-color: gray
 }
