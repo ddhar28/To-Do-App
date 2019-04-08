@@ -60,41 +60,27 @@ function editTask (e) {
   else editBox.focus()
 }
 
-// function editNote (e) {
-//   let noteBox
-//   let noNote = e.target.textContent === '\u271A Note'
-//   noteBox = noNote ? noteBox = document.createElement('textarea') : e.target.parentNode.querySelector('textarea')
-
-// }
-
 function editNote (e) {
   let noteBox
-  if (e.target.textContent === ('\u271A Note')) {
-    noteBox = document.createElement('textarea')
-    noteBox.setAttribute('class', 'noteEdit')
-  } else noteBox = e.target.parentNode.querySelector('textarea')
-  if (noteBox.getAttribute('class') === 'noteEdit' && e.target.textContent !== 'Done') {
-    e.target.parentNode.style.height = '150px'
-    e.target.parentNode.appendChild(noteBox)
-    noteBox.parentNode.querySelector('.complete').disabled = true
-    noteBox.parentNode.querySelector('.delete').disabled = true
-    e.target.textContent = 'Done'
-    noteBox.focus()
-  } else if (e.target.textContent === 'Done') {
-    noteBox.parentNode.querySelector('.complete').disabled = false
-    noteBox.parentNode.querySelector('.delete').disabled = false
-    if (noteBox.value.trim() !== '') {
-      e.target.textContent = String.fromCodePoint(128065) + ' Note'
-      noteBox.setAttribute('class', 'noteDone')
-    } else {
-      e.target.textContent = '\u271A Note'
-      noteBox.parentNode.removeChild(noteBox)
-    }
-    e.target.parentNode.style.height = 'auto'
-  } else {
-    noteBox.setAttribute('class', 'noteEdit')
-    editNote(e)
+  let noNote = e.target.textContent === '\u271A Note'
+  noteBox = noNote ? document.createElement('textarea') : e.target.parentNode.querySelector('textarea')
+  if (noNote) noteBox.setAttribute('class', 'noteEdit')
+  let isEditable = noteBox.getAttribute('class') === 'noteEdit'
+  e.target.textContent = 'Done'
+  e.target.parentNode.style.height = noNote ? '150px' : 'auto'
+  if (noNote || !isEditable) e.target.parentNode.appendChild(noteBox)
+  noteBox.parentNode.querySelector('.complete').disabled = isEditable
+  noteBox.parentNode.querySelector('.delete').disabled = isEditable
+  if (!noNote) {
+    noteBox.parentNode.querySelector('.complete').disabled = !isEditable
+    noteBox.parentNode.querySelector('.delete').disabled = !isEditable
+    e.target.parentNode.style.height = isEditable ? 'auto' : '150px'
+    noteBox.setAttribute('class', isEditable ? 'noteDone' : 'noteEdit')
+    let noVal = noteBox.value.trim() === ''
+    if (noVal) noteBox.parentNode.removeChild(noteBox)
+    e.target.textContent = (isEditable ? (noVal ? '\u271A Note' : String.fromCodePoint(128065) + ' Note') : 'Done')
   }
+  noteBox.focus()
 }
 
 function enter (e, f = null, para = e) {
@@ -102,6 +88,6 @@ function enter (e, f = null, para = e) {
 }
 
 taskInp.value = ''
-add.addEventListener('click', () => addItem(taskInp.value.trim()))
+add.addEventListener('click', (e) => addItem(taskInp.value.trim()))
 taskInp.addEventListener('keydown', (e) => enter(e, addItem, taskInp.value.trim()))
 taskInp.focus()
