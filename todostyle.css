@@ -82,7 +82,9 @@ li>input {
   width: 50%;
   height: 65%;
   resize: none;
-  font-size: medium
+  font-size: medium;
+  background-color: rgba(247, 184, 155, 0.5);
+  border: none
 }
 
 .noteDone {

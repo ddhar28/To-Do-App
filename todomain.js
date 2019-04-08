@@ -2,28 +2,12 @@ let taskInp = document.getElementById('taskInp')
 let list = document.getElementById('taskList')
 let add = document.getElementById('addTask')
 
-function createOptions () {
-  let complete = document.createElement('button')
-  complete.setAttribute('class', 'complete')
-  complete.textContent = '\u2714'
-  complete.addEventListener('click', (e) => completeTask(e))
-
-  let del = document.createElement('button')
-  del.setAttribute('class', 'delete')
-  del.textContent = '\u2718'
-  del.addEventListener('click', (e) => e.target.parentNode.parentNode.removeChild(e.target.parentNode))
-
-  let edit = document.createElement('button')
-  edit.setAttribute('class', 'edit')
-  edit.textContent = '\u270D'
-  edit.addEventListener('click', (e) => editTask(e))
-
-  let addNote = document.createElement('button')
-  addNote.setAttribute('class', 'addNote')
-  addNote.textContent = '\u271A' + ' Note'
-  addNote.addEventListener('click', (e) => editNote(e))
-
-  return [del, complete, edit, addNote]
+function createOption (element, className, txt, func) {
+  let btn = document.createElement(element)
+  btn.setAttribute('class', className)
+  btn.textContent = txt
+  btn.addEventListener('click', func)
+  return btn
 }
 
 function addItem (task) {
@@ -38,9 +22,13 @@ function addItem (task) {
     })
     taskName.disabled = true
     newTask.appendChild(taskName)
-    newTask.append(...createOptions())
+    newTask.append(createOption('button', 'delete', '\u2718', (e) => e.target.parentNode.parentNode.removeChild(e.target.parentNode)))
+    newTask.append(createOption('button', 'complete', '\u2714', completeTask))
+    newTask.append(createOption('button', 'edit', '\u270D', editTask))
+    newTask.append(createOption('button', 'addNote', '\u271A Note', editNote))
     newTask.setAttribute('class', 'active')
-    list.appendChild(newTask)
+    if (list.children.length < 1) list.appendChild(newTask)
+    else list.insertBefore(newTask, list.childNodes[0])
   }
   taskInp.value = ''
   taskInp.focus()
@@ -48,41 +36,36 @@ function addItem (task) {
 
 function completeTask (e) {
   let task = e.target.parentNode
-  let edit = e.target.parentNode.querySelector('.edit')
-  let note = e.target.parentNode.querySelector('.addNote')
-
-  if (task.getAttribute('class') === 'active') {
-    task.setAttribute('class', 'inactive')
-    edit.disabled = true
-    note.disabled = true
-    e.target.textContent = '\u27F3'
-  } else if (task.getAttribute('class') === 'inactive') {
-    task.setAttribute('class', 'active')
-    edit.disabled = false
-    note.disabled = false
-    e.target.textContent = '\u2714'
-  }
+  let edit = task.querySelector('.edit')
+  let note = task.querySelector('.addNote')
+  let isActive = task.getAttribute('class') === 'active'
+  task.setAttribute('class', isActive ? 'inactive' : 'active')
+  edit.disabled = isActive
+  note.disabled = isActive
+  e.target.textContent = isActive ? '\u27F3' : '\u2714'
+  if (isActive) list.insertBefore(task, list.lastChild.nextSibling)
+  else list.insertBefore(task, list.firstChild)
   taskInp.focus()
 }
 
 function editTask (e) {
   let editBox = e.target.parentNode.firstChild
-  if (editBox.getAttribute('class') === 'noEdit') {
-    editBox.setAttribute('class', 'editMode')
-    editBox.parentNode.querySelector('.complete').disabled = true
-    editBox.parentNode.querySelector('.delete').disabled = true
-    e.target.textContent = 'Ok'
-    editBox.disabled = false
-    editBox.focus()
-  } else if (editBox.getAttribute('class') === 'editMode') {
-    editBox.setAttribute('class', 'noEdit')
-    editBox.parentNode.querySelector('.edit').textContent = '\u270D'
-    editBox.parentNode.querySelector('.complete').disabled = false
-    editBox.parentNode.querySelector('.delete').disabled = false
-    editBox.disabled = true
-    taskInp.focus()
-  }
+  let isEdit = editBox.getAttribute('class') === 'editMode'
+  editBox.setAttribute('class', isEdit ? 'noEdit' : 'editMode')
+  editBox.parentNode.querySelector('.complete').disabled = !isEdit
+  editBox.parentNode.querySelector('.delete').disabled = !isEdit
+  editBox.parentNode.querySelector('.edit').textContent = isEdit ? '\u270D' : 'Ok'
+  editBox.disabled = isEdit
+  if (isEdit) taskInp.focus()
+  else editBox.focus()
 }
+
+// function editNote (e) {
+//   let noteBox
+//   let noNote = e.target.textContent === '\u271A Note'
+//   noteBox = noNote ? noteBox = document.createElement('textarea') : e.target.parentNode.querySelector('textarea')
+
+// }
 
 function editNote (e) {
   let noteBox
