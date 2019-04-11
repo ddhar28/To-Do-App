@@ -26,7 +26,7 @@ function addItem (task) {
     newTask.append(createOption('button', 'complete', '\u2714', completeTask))
     newTask.append(createOption('button', 'edit', '\u270D', editTask))
     newTask.append(createOption('button', 'addNote', '\u271A Note', editNote))
-    newTask.setAttribute('class', 'active')
+    setTimeout(() => (newTask.setAttribute('class', 'active')), 10)
     if (list.children.length < 1) list.appendChild(newTask)
     else list.insertBefore(newTask, list.childNodes[0])
   }
@@ -36,12 +36,11 @@ function addItem (task) {
 
 function completeTask (e) {
   let task = e.target.parentNode
-  let edit = task.querySelector('.edit')
-  let note = task.querySelector('.addNote')
   let isActive = task.getAttribute('class') === 'active'
-  task.setAttribute('class', isActive ? 'inactive' : 'active')
-  edit.disabled = isActive
-  note.disabled = isActive
+  let taskClass = isActive ? 'inactive' : 'active'
+  setTimeout(() => (task.setAttribute('class', taskClass)), 50)
+  task.querySelector('.edit').disabled = isActive
+  task.querySelector('.addNote').disabled = isActive
   e.target.textContent = isActive ? '\u27F3' : '\u2714'
   if (isActive) list.insertBefore(task, list.lastChild.nextSibling)
   else list.insertBefore(task, list.firstChild)
@@ -58,6 +57,7 @@ function editTask (e) {
   editBox.disabled = isEdit
   if (isEdit) taskInp.focus()
   else editBox.focus()
+  if (editBox.value === '') editBox.value = 'Untitled'
 }
 
 function editNote (e) {
@@ -77,7 +77,7 @@ function editNote (e) {
   noteBox.focus()
 }
 
-function enter (e, f = null, para = e) {
+function enter (e, f, para = e) {
   if (e.code === 'Enter') f(para)
 }
 
