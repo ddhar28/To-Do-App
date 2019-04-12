@@ -7,12 +7,13 @@
 </head>
 
 <body>
-  <header><h1>Create your to-do list</h1></header>  
+  <header><h1><img src = "plane.png"><span>Think. Plan. Execute.</span></h1></header>
   <div class = "input">
-    <input id = "taskInp" type="text" maxlength="100" placeholder="Enter task title. (Max 100 characters)">
-    <button id="addTask">Add</button>
+    <input id = "taskInp" type="text" maxlength="65" placeholder="Enter task title. (Max 65 characters)">
+    <button id="addTask">+ Task</button>
   </div>
-  <hr>
-  <ul id = "taskList"></ul>
+  <div class = "displayTask">
+    <ul id = "taskList"></ul>
+  </div>
   <script src = "todomain.js"></script>
 </body>

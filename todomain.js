@@ -3,7 +3,6 @@ const list = document.getElementById('taskList')
 const add = document.getElementById('addTask')
 const storage = window.localStorage
 let tasks = storage.length ? JSON.parse(storage.getItem('task')) : []
-let taskDetails = {}
 
 function createOption (element, className, txt, func) {
   let btn = document.createElement(element)
@@ -25,9 +24,19 @@ function updateTask (id, key, value, del = false) {
   saveTask()
 }
 
+const createId = (() => {
+  let last = 0
+  return () => {
+    let id = Date.now()
+    if (id <= last) id = ++last
+    else last = id
+    return id
+  }
+})()
+
 function addTask (task) {
   if (task !== '') {
-    taskDetails = { 'id': Math.floor(Math.random() * 100) + task.slice(0, 5), 'title': task, 'class': 'active', 'note': '' }
+    let taskDetails = { 'id': createId() + '', 'title': task, 'class': 'active', 'note': '' }
     tasks.push(taskDetails)
     displayTask(taskDetails)
     saveTask()
@@ -63,6 +72,10 @@ function displayTask (task) {
   newTask.setAttribute('id', task.id)
   if (list.children.length < 1) list.appendChild(newTask)
   else list.insertBefore(newTask, list.childNodes[0])
+  if (task.class !== 'active') {
+    newTask.parentNode.querySelector('.edit').disabled = true
+    newTask.parentNode.querySelector('.addNote').disabled = true
+  }
   taskInp.value = ''
   taskInp.focus()
 }
@@ -131,7 +144,10 @@ taskInp.addEventListener('keydown', (e) => {
 taskInp.focus()
 if (storage.length) {
   const data = JSON.parse(storage.getItem('task'))
+  let activeTask = []
   data.forEach(item => {
-    displayTask(item)
+    if (item.class === 'active') activeTask.push(item)
+    else displayTask(item)
   })
+  activeTask.forEach(item => displayTask(item))
 }
